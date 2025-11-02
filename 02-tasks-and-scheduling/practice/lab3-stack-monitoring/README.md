@@ -453,11 +453,21 @@ void dynamic_stack_monitor(TaskHandle_t task_handle, const char* task_name)
 ## คำถามสำหรับวิเคราะห์
 
 1. Task ไหนใช้ stack มากที่สุด? เพราะอะไร?
+- Heavy Task เพราะมี local array ขนาดใหญ่หลายตัว ทำให้ใช้ stack สูงในแต่ละรอบการทำงาน
 2. การใช้ heap แทน stack มีข้อดีอย่างไร?
+- ลดความต้องการ stack ต่อ task (ทำให้ตั้ง stack size เล็กลงได้)
 3. Stack overflow เกิดขึ้นเมื่อไหร่และทำอย่างไรป้องกัน?
+- เกิดเมื่อ การใช้ stack เกินขนาดที่กำหนด 
+วิธีป้องกัน เพิ่ม stack ให้เหมาะสม (เผื่อ headroom 20–30% จากค่าต่ำสุดที่วัดได้)
+ย้ายข้อมูลใหญ่ไป heap / ใช้ static/global
+หลีกเลี่ยง/จำกัด recursion, ลดตัวแปรบน stack
 4. การตั้งค่า stack size ควรพิจารณาจากอะไร?
+- Worst-case path ของฟังก์ชันที่ task รันจริง (ความลึกของการเรียก, ขนาด local)
+- พฤติกรรม logging (ระดับ VERBOSE/DEBUG ใช้ stack มากขึ้น)
+- การใช้ไลบรารี/ฟังก์ชันสตริง/printf (format ยาว ๆ ใช้ stack)
 5. Recursion ส่งผลต่อ stack usage อย่างไร?
-
+- stack เพิ่มแบบเชิงเส้น ตามความลึก เสี่ยง overflow มาก
+ 
 ## ผลการทดลองที่คาดหวัง
 
 | Task | Stack Size | Usage Pattern | Warning Level |

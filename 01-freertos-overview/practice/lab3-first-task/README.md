@@ -407,20 +407,28 @@ ESP_LOGI(TAG, "Task state: %s", state_names[state]);
 
 ## Checklist การทำงาน
 
-- [ ] สร้าง Task พื้นฐานสำเร็จ
-- [ ] เข้าใจ Task parameters และ return values
-- [ ] ทดสอบ Task priorities
-- [ ] ใช้ Task management APIs (suspend/resume)
-- [ ] แสดง runtime statistics
-- [ ] ทำแบบฝึกหัดครบ
+- [ /] สร้าง Task พื้นฐานสำเร็จ
+- [ /] เข้าใจ Task parameters และ return values
+- [ /] ทดสอบ Task priorities
+- [ /] ใช้ Task management APIs (suspend/resume)
+- [ /] แสดง runtime statistics
+- [ /] ทำแบบฝึกหัดครบ
 
 ## คำถามทบทวน
 
 1. เหตุใด Task function ต้องมี infinite loop?
+- เพราะ Task ใน FreeRTOS จะทำงานต่อเนื่องตลอดอายุระบบ หากไม่มี loop ฟังก์ชันจะจบทำงานและ Task จะถูกลบออกจาก scheduler ทันที ทำให้ Task หยุดทำงาน
 2. ความหมายของ stack size ใน xTaskCreate() คืออะไร?
+- คือขนาดหน่วยความจำ (Stack) ที่ Task จะใช้สำหรับเก็บตัวแปร, ค่า return, register ฯลฯ
+ปกติหน่วยเป็น words (ไม่ใช่ bytes) และถ้ากำหนดน้อยเกินไปจะเกิด stack overflow
 3. ความแตกต่างระหว่าง vTaskDelay() และ vTaskDelayUntil()?
+- vTaskDelay()	หน่วงแบบ relative delay (นับเริ่มจากเวลาที่เรียก)
+- vTaskDelayUntil()	หน่วงแบบ absolute delay (รักษาความถี่คงที่ เหมาะกับ periodic task)
 4. การใช้ vTaskDelete(NULL) vs vTaskDelete(handle) ต่างกันอย่างไร?
+- vTaskDelete(NULL)	ลบตัวเอง (self-delete)
+- vTaskDelete(task_handle)	ลบ Task อื่นที่มี handle กำกับ
 5. Priority 0 กับ Priority 24 อันไหนสูงกว่า?
+- Priority 24 สูงกว่า
 
 ## บทสรุป
 

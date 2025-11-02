@@ -366,10 +366,19 @@ xTaskCreatePinnedToCore(low_priority_task, "LowPrio", 3072, NULL, 1, NULL, 1);  
 ## คำถามสำหรับวิเคราะห์
 
 1. Priority ไหนทำงานมากที่สุด? เพราะอะไร?
+- High Priority Task (Priority 5) ทำงานมากที่สุด
+เพราะ FreeRTOS ใช้ Priority-based Preemptive Scheduling — Task ที่มี priority สูงกว่าจะถูกเลือกให้ทำงานก่อน และสามารถ preempt (หยุดชั่วคราว) task ที่มี priority ต่ำกว่าได้ทันที
 2. เกิด Priority Inversion หรือไม่? จะแก้ไขได้อย่างไร?
+- เกิด Priority Inversion ได้ ในสถานการณ์ที่ Task priority ต่ำ ครอบครอง resource ที่ task priority สูงต้องการ
+วิธีแก้ไข: ใช้ Mutex ที่มี Priority Inheritance
 3. Tasks ที่มี priority เดียวกันทำงานอย่างไร?
+- แต่ละ task จะได้เวลาทำงานสลับกัน (time-slicing) ตาม tick interrupt ของ FreeRTOS
 4. การเปลี่ยน Priority แบบ dynamic ส่งผลอย่างไร?
+- priority ทำให้ task นั้นถูก preempt ได้ง่ายขึ้น และทำงานน้อยลงเมื่อ priority ต่ำกว่า task อื่น
 5. CPU utilization ของแต่ละ priority เป็นอย่างไร?
+- สูงที่สุด: High Priority (ระดับ 5)
+ปานกลาง: Medium Priority (ระดับ 3)
+ต่ำที่สุด: Low Priority (ระดับ 1)
 
 ## ผลการทดลองที่คาดหวัง
 
